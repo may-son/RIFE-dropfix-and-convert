@@ -59,6 +59,26 @@ Convert all sequences in **E:\Footage\25fps** from 25 to 29.97 FPS, add "**new_*
 py convert_fps.py -dir "E:\Footage\25fps" -fps 25 29.97 -rename "new_*" -model rife41
 ```
 
+## Usage Docker:
+- If you want to use CPU only, remove --gpus=all on the inference command
+### Build image (NVIDIA)
+```
+docker build -f Dockerfile . -t fixdropframes
+```
+### Build image (CPU)
+```
+docker build -f Dockerfile.cpu . -t fixdropframes
+```
+### Example using Docker:
+- On Windows change -v ./folder... to -v .\folder... (Example: `-v ./rife46:/fixdropframes/train_log` to `.\rife46:/fixdropframes/train_log`)
+```
+docker run --gpus all --rm -it -v ./rife46:/fixdropframes/train_log -v ./video_frames:/input fixdropframes fix_drop_frames.py -dir /input
+```
+Try to fix all dropped frames in the sequence
+```
+docker run --gpus all --rm -it -v ./rife46:/fixdropframes/train_log -v ./video_frames:/input fixdropframes fix_drop_frames.py -dir /input -atol 100 -max 31
+```
+
 ## Extra info:
 To integrate new models, if they are still backward compatible:
 1. Unpack the "train_log" folder to the program folder.
